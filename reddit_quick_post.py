@@ -8,7 +8,7 @@ class RedditHelper:
             client_id=client_id,
             client_secret=client_secret,
             password=password,
-            user_agent="Scheduler by u/Crygie",
+            user_agent="SimpleRedditMultiPoster by u/Kuraiji",
             username=username
         )
         self.reddit.validate_on_submit = True
