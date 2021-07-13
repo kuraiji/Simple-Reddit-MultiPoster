@@ -5,6 +5,7 @@ from days_of_the_week import DaysOfTheWeek
 import pytz
 import datetime
 import configparser
+import re
 
 # Open config file
 config = configparser.ConfigParser()
@@ -16,11 +17,11 @@ client_secret = config['DEFAULT']['Client_secret']
 username = config['DEFAULT']['Username']
 password = config['DEFAULT']['Password']
 timezone = pytz.timezone(config['DEFAULT']['Timezone'])
-weekday = DaysOfTheWeek[str.upper(config['DEFAULT']['Day_to_post'])]
+weekday = [DaysOfTheWeek[day] for day in re.split(', ', config['DEFAULT']['Day_to_post'].upper())]
 
 # Check if today is the right day to post
 current_day = DaysOfTheWeek(datetime.datetime.now(timezone).date().weekday())
-if not(weekday is current_day or weekday is DaysOfTheWeek.ALL):
+if not(current_day in weekday or DaysOfTheWeek.ALL in weekday):
     quit()
 
 # Initialize Reddit API
