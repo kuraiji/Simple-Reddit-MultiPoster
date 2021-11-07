@@ -17,18 +17,18 @@ client_secret = config['DEFAULT']['Client_secret']
 username = config['DEFAULT']['Username']
 password = config['DEFAULT']['Password']
 timezone = pytz.timezone(config['DEFAULT']['Timezone'])
-weekday = [DaysOfTheWeek[day] for day in re.split(', ', config['DEFAULT']['Day_to_post'].upper())]
-
-# Check if today is the right day to post
-current_day = DaysOfTheWeek(datetime.datetime.now(timezone).date().weekday())
-if not(current_day in weekday or DaysOfTheWeek.ALL in weekday):
-    quit()
 
 # Initialize Reddit API
 reddit = RedditHelper(client_id, client_secret, username, password)
 
 # Post
 for post in config.sections():
+    # Check if today is the right day to post
+    weekday = [DaysOfTheWeek[day] for day in re.split(', ', config[post]['Day_to_post'].upper())]
+    current_day = DaysOfTheWeek(datetime.datetime.now(timezone).date().weekday())
+    if not (current_day in weekday or DaysOfTheWeek.ALL in weekday):
+        continue
+    #  Submit text post
     subreddit = config[post]['Subreddit']
     title = config[post]['Title']
     with open(config[post]['Selftext'], encoding='utf8') as file:
